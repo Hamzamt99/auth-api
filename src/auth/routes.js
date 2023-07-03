@@ -27,7 +27,7 @@ function homePage(req, res) {
 }
 
 // signup function
-async function signupHandler(req, res) {
+async function signupHandler(req, res,next) {
     try {
         const { username, password, role } = req.body
         const obj = {
