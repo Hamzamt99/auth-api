@@ -27,7 +27,7 @@ function homePage(req, res) {
 }
 
 // signup function
-async function signupHandler(req, res,next) {
+async function signupHandler(req, res, next) {
     try {
         const { username, password, role } = req.body
         const obj = {
@@ -38,7 +38,7 @@ async function signupHandler(req, res,next) {
         const record = await user.create(obj)
         res.status(201).json(record)
     } catch (e) {
-       next('error')
+        next('error')
     }
 
 }

@@ -17,11 +17,12 @@ describe('AUTH Routes', () => {
       const response = await request.post('/signup').send({
         username: 'testuser',
         password: 'testpassword',
+        role:'user'
       })
       console.log('test',response.body.token)
-      expect(response.status).toEqual(201);
-      expect(response.body).toHaveProperty('username');
-      expect(response.body).toHaveProperty('token');
+      expect(response.status).toBe(201);
+      expect(response.body.username).toBeDefined();
+      // expect(response.body).toHaveProperty('token');
       expect(response.body.username).toBe('testuser');
       expect(response.body.token).toBeDefined();
     });
