@@ -38,7 +38,7 @@ async function signupHandler(req, res) {
         const record = await user.create(obj)
         res.status(201).json(record)
     } catch (e) {
-        throw new Error(e)
+       next('error')
     }
 
 }

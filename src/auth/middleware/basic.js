@@ -15,6 +15,6 @@ module.exports = async function signinMiddleware(req, res, next) {
             next();
         })
     } else {
-        throw new Error('not authorized')
+        next('error')
     }
 }
