@@ -18,10 +18,33 @@ const users = sequelize.define('users', {
     },
     password: {
         type: DataTypes.STRING,
-        allowNull: false
+        allowNull: false,
+        set(password) {
+            const hashPass = bcrypt.hashSync(password, 5);
+            this.setDataValue('password', hashPass)
+        }
     },
     token: {
-        type: DataTypes.VIRTUAL
+        type: DataTypes.VIRTUAL,
+        get() {
+            return jwt.sign({ username: this.username, role: this.role }, SECRET)
+        }
+    },
+    role: {
+        type: DataTypes.ENUM('user', 'writer', 'editor', 'admin'),
+        defaultValue: 'user'
+    },
+    Capabilities: {
+        type: DataTypes.VIRTUAL,
+        get() {
+            const acl = {
+                user: ['read'],
+                writer: ['read', 'create'],
+                editor: ['read', 'create', 'update'],
+                admin: ['read', 'create', 'update', 'delete']
+            }
+            return acl[this.role]
+        }
     }
 })
 
@@ -31,14 +54,9 @@ users.signinMiddleware = async function (username, password) {
         const user = await users.findOne({ where: { username } })
         const isValid = await bcrypt.compare(password, user.password)
         if (isValid) {
-            const userToken = jwt.sign({ username: user.username }, SECRET)
-            return {
-                user,
-                Token: userToken
-            }
-        } else {
-            next('not authorized')
-        }
+            return user
+        } else next('not authorized')
+
     } catch (e) {
         console.log(e)
     }
@@ -47,13 +65,12 @@ users.signinMiddleware = async function (username, password) {
 users.bearerToken = async function (token) {
     const parseToken = jwt.verify(token, SECRET)
     const findUser = await users.findOne({ where: { username: parseToken.username } })
-    if(findUser){
-        console.log(findUser);
+    if (findUser) {
         return findUser;
-    }else {
+    } else {
         throw new Error('invalid token')
     }
-    
+
 }
 
 module.exports = users
