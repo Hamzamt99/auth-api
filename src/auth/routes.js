@@ -16,7 +16,7 @@ router.get('/secretstuff', isAuth, acl('read'), secretHandler)
 router.post('/secretstuff', isAuth, acl('create'), secretHandler)
 router.put('/secretstuff', isAuth, acl('update'), secretHandler)
 router.delete('/secretstuff', isAuth, acl('delete'), secretHandler)
-router.get('/users', isAuth)
+router.get('/users', isAuth,usersHnadler)
 // Home function
 function homePage(req, res) {
     try {
@@ -50,6 +50,10 @@ async function signinHandler(req, res) {
 //secret function 
 async function secretHandler(req, res) {
     res.status(200).json('welcome to secret page')
+}
+
+async function usersHnadler(req,res){
+    res.status(200).json('works')
 }
 
 
