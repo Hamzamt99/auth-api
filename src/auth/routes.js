@@ -8,7 +8,7 @@ const signinMiddleware = require('../auth/middleware/basic')
 const isAuth = require('../auth/middleware/bearer')
 const acl = require('./middleware/acl')
 // controller
-router.get('/', acl('delete'), homePage)
+router.get('/', homePage)
 router.post('/signup', signupHandler)
 //middleware to check authorization
 router.post('/signin', signinMiddleware, signinHandler)
