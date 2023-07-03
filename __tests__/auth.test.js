@@ -18,8 +18,8 @@ describe('AUTH Routes', () => {
         username: 'testuser',
         password: 'testpassword',
       })
-        .expect(201);
-
+      console.log('test',response.body.token)
+      expect(response.status).toEqual(201);
       expect(response.body).toHaveProperty('username');
       expect(response.body).toHaveProperty('token');
       expect(response.body.username).toBe('testuser');
