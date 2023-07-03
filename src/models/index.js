@@ -4,10 +4,19 @@ require('dotenv').config()
 
 const { Sequelize, DataTypes } = require('sequelize')
 
-const DATA_BASE = process.env.DATA_BASE_URL;
+const DATABASE_URI = process.env.NODE_ENV === 'test' ? 'sqlite:memory:' : process.env.DATA_BASE_URL;
 
-const sequelize = new Sequelize(DATA_BASE,{})
+let sequelizeOptions = process.env.NODE_ENV === 'production' ? {
+    dialectOptions: {
+        ssl: {
+            require: true,
+            rejectUnauthorized: false
+        }
+    }
+} : {}
 
-module.exports =  sequelize
+const sequelize = new Sequelize(DATABASE_URI, sequelizeOptions)
+
+module.exports = sequelize
 
 
